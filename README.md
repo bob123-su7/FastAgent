@@ -1,2 +1,2 @@
 # FastAgent
-Fast Star
+这是 Fast Agent，欢迎大家提贡献
