@@ -12,6 +12,7 @@ FastAgent 是一个**面向实践**的 AI Agent 学习项目，欢迎通过示�
 - **跨工具工作流规范**：一套通用的 10 步闭环工作流程 Skill，兼容 WorkBuddy / Claude Code / Codex / Cursor。
 - **社区共建**：欢迎通过 Issue 和 Pull Request 一起完善这个学习项目。
 
+### 安装依赖
 
 ```bash
 pip install -r requirements.txt
@@ -77,7 +78,7 @@ print(tracer.to_json())  # 导出 JSON
 
 ## 📁 目录结构
 
-```
+```text
 FastAgent/
 ├── fastagent/                         # Agent、Memory、Skill 与内置工具等核心代码
 │   └── tools/                         # Calculator、Clock、文件读写等内置 Skill
@@ -87,6 +88,7 @@ FastAgent/
 ├── docs/                              # 技术文档、快速开始与工程实践说明
 ├── evals/                             # 示例评测任务数据
 ├── tests/                             # 单元测试与回归测试
+├── my_skills/                         # 可复用的 Agent Skills 集合（音视频、PCAP、PDF 等）
 ├── 工作流程规范/                       # 跨工具工作流 Skill
 ├── AI_Agent.md                        # AI Agent 科普指南
 ├── PYTHON知识点与练习网站              # Python 在线练习入口
@@ -122,6 +124,23 @@ FastAgent/
 3. **实践**：运行 `examples/hello_fastagent.py`，动手体验；通过 `PYTHON知识点与练习网站` 在线练习 Python。
 4. **落地**：参考 [AI Agent 工程落地与验收清单](docs/agent-engineering-checklist.md)，把 Demo 推进到可验收实现。
 5. **提效**：使用 [工作流程规范](工作流程规范/README.md)，用结构化流程规划、执行和检查复杂任务。
+
+
+# FastAgent
+
+## 项目亮点
+
+- 支持多种 Agent 工作流
+- 提供示例代码
+- 包含评估和追踪功能
+
+## 目录结构
+
+- `fastagent/` 核心代码
+- `examples/` 示例
+- `docs/` 文档
+- `tests/` 测试
+
 
 ## 🤝 参与贡献
 

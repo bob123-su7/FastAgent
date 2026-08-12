@@ -2,9 +2,10 @@
 
 from .calculator import CalculatorSkill
 from .clock import ClockSkill
-from .file_io import ReadFileSkill, WriteFileSkill
+from .file_io import AppendFileSkill, ReadFileSkill, WriteFileSkill
 
 __all__ = [
+    "AppendFileSkill",
     "CalculatorSkill",
     "ClockSkill",
     "ReadFileSkill",

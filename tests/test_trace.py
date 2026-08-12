@@ -2,12 +2,6 @@
 
 from __future__ import annotations
 
-import asyncio
-import json
-import tempfile
-import time
-import unittest
-from pathlib import Path
 
 from fastagent import AgentTracer
 from fastagent_trace import TraceEvent, TraceRecorder, TraceValidationError
@@ -221,3 +215,38 @@ class AgentTracerAsyncTraceDecoratorTests(unittest.IsolatedAsyncioTestCase):
         with self.assertRaisesRegex(RuntimeError, "boom"):
             await step()
         self.assertEqual(len(tracer.to_dict()["children"]), 1)
+=======
+class AgentTracerPrintTreeTests(unittest.TestCase):
+    def test_print_tree_includes_nested_spans_and_metadata(self) -> None:
+        tracer = AgentTracer()
+        with tracer.span("plan", metadata={"model": "demo"}):
+            with tracer.span("tool"):
+                pass
+        with tracer.span("finish"):
+            pass
+
+        output = io.StringIO()
+        with redirect_stdout(output):
+            tracer.print_tree()
+
+        report = output.getvalue()
+        self.assertIn("├──", report)
+        self.assertIn("plan", report)
+        self.assertIn("model=demo", report)
+        self.assertIn("└──", report)
+        self.assertIn("tool", report)
+        self.assertIn("finish", report)
+class AgentTracerOutputTests(unittest.TestCase):
+    def test_print_tree_renders_spans_and_total_duration(self) -> None:
+        tracer = AgentTracer(name="demo-agent")
+        with tracer.span("plan"):
+            time.sleep(0.001)
+
+        output = StringIO()
+        with redirect_stdout(output):
+            tracer.print_tree()
+
+        rendered = output.getvalue()
+        self.assertGreater(tracer.to_dict()["duration_ms"], 0)
+        self.assertIn("总耗时", rendered)
+        self.assertIn("plan", rendered)
