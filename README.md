@@ -45,6 +45,12 @@ Hello, FastAgent! Welcome to FastAgent.
 
 
 
+- [AI Agent 科普指南](AI_Agent.md)：了解智能体的核心能力、架构与常见应用。
+- [Harness 技术介绍及运用](docs/harness技术介绍及运用.md)：理解调度层如何连接模型、记忆与工具。
+- [AI Agent 工程落地与验收清单](docs/agent-engineering-checklist.md)：用任务契约、风险分级、评测与可观测性把 Demo 推进到可验收实现。
+- [Evaluation Quickstart](docs/evaluation-quickstart.md)：使用本地、确定性的 JSONL 任务集评测任意 Python Agent callable。
+- [工作流程规范](工作流程规范/README.md)：通过结构化流程规划、执行和检查复杂任务。
+=======
 ## 📁 目录结构
 
 ```
