@@ -44,3 +44,20 @@ class WriteFileSkill(Skill):
         target.parent.mkdir(parents=True, exist_ok=True)
         target.write_text(content, encoding="utf-8")
         return f"已写入 {target}"
+
+
+class AppendFileSkill(Skill):
+    """向根目录下某个文本文件追加内容，不存在时创建文件。"""
+
+    name = "append_file"
+    description = "向指定根目录下某个文本文件追加内容，参数为相对路径 path 与文本 content"
+
+    def __init__(self, root: str | Path = ".") -> None:
+        self._root = Path(root)
+
+    async def run(self, path: str, content: str) -> str:
+        target = _resolve_within_root(self._root, path)
+        target.parent.mkdir(parents=True, exist_ok=True)
+        with target.open("a", encoding="utf-8") as file:
+            file.write(content)
+        return f"已追加 {target}"
