@@ -123,6 +123,23 @@ FastAgent/
 4. **落地**：参考 [AI Agent 工程落地与验收清单](docs/agent-engineering-checklist.md)，把 Demo 推进到可验收实现。
 5. **提效**：使用 [工作流程规范](工作流程规范/README.md)，用结构化流程规划、执行和检查复杂任务。
 
+
+# FastAgent
+
+## 项目亮点
+
+- 支持多种 Agent 工作流
+- 提供示例代码
+- 包含评估和追踪功能
+
+## 目录结构
+
+- `fastagent/` 核心代码
+- `examples/` 示例
+- `docs/` 文档
+- `tests/` 测试
+
+
 ## 🤝 参与贡献
 
 欢迎提交 Issue 或 Pull Request！提交前请先阅读[贡献指南](CONTRIBUTING.md)。
