@@ -79,22 +79,29 @@ print(tracer.to_json())  # 导出 JSON
 
 ```
 FastAgent/
+├── fastagent/                         # Agent、Memory、Skill 与内置工具等核心代码
+│   └── tools/                         # Calculator、Clock、文件读写等内置 Skill
+├── fastagent_eval/                    # 评测任务运行与打分相关模块
+├── fastagent_trace/                   # Agent 执行追踪与记录相关模块
 ├── examples/                          # 可运行的示例代码
-│   └── hello_fastagent.py             # 欢迎示例
-├── docs/                              # 技术文档
-│   ├── harness技术介绍及运用.md        # Harness 调度层详解
-│   └── agent-engineering-checklist.md # 工程落地与验收清单
+├── docs/                              # 技术文档、快速开始与工程实践说明
+├── evals/                             # 示例评测任务数据
+├── tests/                             # 单元测试与回归测试
 ├── 工作流程规范/                       # 跨工具工作流 Skill
-│   ├── SKILL.md                       # 10 步闭环流程规范
-│   ├── README.md                      # 使用说明
-│   ├── install.sh                     # 一键安装脚本
-│   └── references/                    # 提示词与设计规范
 ├── AI_Agent.md                        # AI Agent 科普指南
 ├── PYTHON知识点与练习网站              # Python 在线练习入口
 ├── AGENTS.md                          # AI 代理协作约定
 ├── CONTRIBUTING.md                    # 贡献指南
+├── pyproject.toml                     # Python 包与测试配置
 └── requirements.txt                   # 依赖清单
 ```
+
+### 目录结构优化建议
+
+- 可以持续强化 `fastagent/`、`fastagent_eval/`、`fastagent_trace/` 三类代码包的边界，让核心框架、评测能力和追踪能力在阅读时更容易区分。
+- 示例代码建议与对应文档互相引用，例如 `examples/` 中的可运行 Demo 可以在 `docs/` 的快速开始文档中标明入口，降低新手首次运行成本。
+- 如果后续练习材料继续增加，可以考虑将根目录中的学习入口和长文档逐步收拢到 `docs/` 或单独的 `learning/` 目录，保持根目录更聚焦于安装、贡献和项目入口。
+- `tests/` 可以按核心模块、评测模块、追踪模块继续拆分子目录，便于未来功能增多后快速定位对应测试。
 
 ## 📚 文档导览
 
