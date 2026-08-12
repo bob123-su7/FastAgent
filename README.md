@@ -103,6 +103,9 @@ FastAgent/
 | [AI Agent 科普指南](AI_Agent.md) | 了解智能体的核心能力、架构与常见应用，从概念到实践一文读懂。 |
 | [Harness 技术介绍及运用](docs/harness技术介绍及运用.md) | 理解调度层如何连接模型、记忆与工具。 |
 | [AI Agent 工程落地与验收清单](docs/agent-engineering-checklist.md) | 用任务契约、风险分级、评测与可观测性把 Demo 推进到可验收实现。 |
+| [FastAgent 架构说明](docs/architecture.md) | 了解 FastAgent 的核心模块、职责边界与整体协作方式。 |
+| [评测快速开始](docs/evaluation-quickstart.md) | 快速运行基础评测并理解评测结果。 |
+| [执行追踪快速开始](docs/trace-quickstart.md) | 使用执行追踪观察 Agent 的步骤、耗时与调用关系。 |
 | [工作流程规范](工作流程规范/README.md) | 通过结构化流程规划、执行和检查复杂任务。 |
 
 ## 🧠 学习路径建议
