@@ -188,9 +188,8 @@ class AgentTracer:
         header += _color(f"(总耗时 {root_dur:.0f}ms)", "dim")
         header += "\n" + "─" * 50
         print(header)
+        lines: List[str] = []
         for i, child in enumerate(self._root.children):
-            lines: List[str] = []
-            child._render_tree(lines, "", i == len(self._root.children) - 1)
             print("\n".join(lines))
         print("─" * 50)
 
