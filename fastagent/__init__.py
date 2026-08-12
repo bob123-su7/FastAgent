@@ -8,6 +8,7 @@
 
 from .agent import Agent
 from .memory import InMemoryMemory, Memory
+from .model import Model, ModelAgent
 from .skill import Skill, SkillRegistry
 from .tracer import AgentTracer, TraceSpan
 from .types import Message, Role, ToolCall, ToolResult
@@ -19,6 +20,8 @@ __all__ = [
     "AgentTracer",
     "InMemoryMemory",
     "Memory",
+    "Model",
+    "ModelAgent",
     "Message",
     "Role",
     "Skill",
