@@ -2,10 +2,13 @@
 
 from __future__ import annotations
 
+from contextlib import redirect_stdout
+from io import StringIO
 import json
-import tempfile
-import unittest
 from pathlib import Path
+import tempfile
+import time
+import unittest
 
 from fastagent import AgentTracer
 from fastagent_trace import TraceEvent, TraceRecorder, TraceValidationError
@@ -133,3 +136,19 @@ class AgentTracerStatsTests(unittest.TestCase):
         result = tracer.stats()
         self.assertEqual(result["max_duration_span"]["name"], "slow")
         self.assertEqual(result["min_duration_span"]["name"], "fast")
+
+
+class AgentTracerOutputTests(unittest.TestCase):
+    def test_print_tree_renders_spans_and_total_duration(self) -> None:
+        tracer = AgentTracer(name="demo-agent")
+        with tracer.span("plan"):
+            time.sleep(0.001)
+
+        output = StringIO()
+        with redirect_stdout(output):
+            tracer.print_tree()
+
+        rendered = output.getvalue()
+        self.assertGreater(tracer.to_dict()["duration_ms"], 0)
+        self.assertIn("总耗时", rendered)
+        self.assertIn("plan", rendered)
