@@ -27,6 +27,12 @@ class InMemoryMemory(Memory):
     """最简单的记忆实现：进程内列表，支持可选的最大长度截断（滑动窗口）。"""
 
     def __init__(self, max_messages: int | None = None) -> None:
+        if max_messages is not None and (
+            isinstance(max_messages, bool)
+            or not isinstance(max_messages, int)
+            or max_messages <= 0
+        ):
+            raise ValueError("max_messages 必须是正整数或 None")
         self._messages: list[Message] = []
         self._max_messages = max_messages
 
