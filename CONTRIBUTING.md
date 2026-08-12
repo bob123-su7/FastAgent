@@ -225,6 +225,58 @@ PR 描述可以使用下面的模板：
 
 如果测试未运行或失败，请将实际命令和原因写在 `Validation` 中，而不是删除该部分。
 
+## 高质量 PR 叙事模板（推荐）
+
+当你希望 PR 更易审阅、也更能体现工程价值时，可以采用以下结构。它强调“问题定义、决策依据、验证证据”三件事，适合文档改进、功能迭代和缺陷修复。
+
+### 标题建议
+
+- 使用「动作 + 对象 + 价值」结构，避免泛化标题。
+- 示例：
+	- `docs: elevate contribution guide with review-ready PR narrative patterns`
+	- `fix: harden tool-call boundary checks for predictable agent execution`
+	- `test: expand regression coverage for memory edge conditions`
+
+### 描述模板
+
+```markdown
+## Executive Summary
+
+- One-sentence statement of what changed and why it matters.
+
+## Problem Statement
+
+- What concrete issue existed before this change?
+- Who or what was affected?
+
+## Design Decision
+
+- Key implementation choice(s) and trade-offs.
+- Why this approach was selected over alternatives.
+
+## Scope
+
+- Included: explicit list of files or behaviors changed.
+- Excluded: related but intentionally deferred items.
+
+## Validation
+
+- `python -m pytest`
+- Additional focused checks (commands + observed results).
+
+## Risk & Rollback
+
+- Known risks introduced by this change.
+- How to revert safely if unexpected regressions appear.
+```
+
+### 审阅友好清单
+
+- 用“可验证事实”替代“主观判断”，例如命令、输出、对比结果。
+- 控制单个 PR 的变更范围，减少审阅上下文切换。
+- 对潜在风险做显式说明，避免审阅者猜测隐含影响。
+- 若涉及行为变化，给出最小复现步骤，确保他人可独立验证。
+
 ## Issue 与反馈
 
 提交 Bug 前，请先搜索现有 Issue，并使用仓库最新的 `main` 分支复现问题。Bug 报告应包含最小复现步骤、预期行为、实际行为和运行环境；仓库提供的 Bug 模板会引导你填写这些信息。
