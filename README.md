@@ -1,6 +1,7 @@
 # FastAgent
 
-这是 Fast Agent，欢迎大家提贡献。
+这是 Fast Agent，欢迎大家提贡献。助力每一个梦想。。。。
+
 
 
 FastAgent 是一个面向实践的学习项目，欢迎通过示例、文档和练习共同完善它。
