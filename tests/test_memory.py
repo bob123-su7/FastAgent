@@ -1,5 +1,7 @@
 """Memory 单元测试。"""
 
+import pytest
+
 from fastagent.memory import InMemoryMemory
 from fastagent.types import Message, Role
 
@@ -41,3 +43,9 @@ def test_history_returns_copy_not_reference():
     history.append(Message(role=Role.USER, content="y"))
 
     assert len(memory.history()) == 1
+
+
+@pytest.mark.parametrize("max_messages", [0, -1, True])
+def test_max_messages_must_be_positive(max_messages):
+    with pytest.raises(ValueError, match="正整数"):
+        InMemoryMemory(max_messages=max_messages)
