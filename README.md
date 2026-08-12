@@ -43,14 +43,38 @@ python3 examples/hello_fastagent.py
 Hello, FastAgent! Welcome to FastAgent.
 ```
 
+### AgentTracer —— Agent 执行追踪
 
+一个零外部依赖的轻量级 Agent 执行追踪器，帮助你定位每一步的耗时瓶颈：
 
-- [AI Agent 科普指南](AI_Agent.md)：了解智能体的核心能力、架构与常见应用。
-- [Harness 技术介绍及运用](docs/harness技术介绍及运用.md)：理解调度层如何连接模型、记忆与工具。
-- [AI Agent 工程落地与验收清单](docs/agent-engineering-checklist.md)：用任务契约、风险分级、评测与可观测性把 Demo 推进到可验收实现。
-- [Evaluation Quickstart](docs/evaluation-quickstart.md)：使用本地、确定性的 JSONL 任务集评测任意 Python Agent callable。
-- [工作流程规范](工作流程规范/README.md)：通过结构化流程规划、执行和检查复杂任务。
-=======
+```bash
+python -X utf8 examples/tracer_demo.py
+```
+
+核心能力：
+- **嵌套步骤计时**：用 `with tracer.span("步骤名")` 自动记录执行时间
+- **树形可视化**：控制台彩色输出追踪树，一目了然
+- **JSON 导出**：一键导出结构化数据，对接 AgentOps 平台
+
+快速上手：
+
+```python
+from fastagent import AgentTracer
+
+tracer = AgentTracer(name="我的Agent")
+
+with tracer.span("搜索信息", metadata={"tool": "SearchAPI"}):
+    with tracer.span("调用搜索引擎"):
+        ...
+    with tracer.span("解析结果"):
+        ...
+
+tracer.print_tree()    # 打印彩色追踪树
+print(tracer.to_json())  # 导出 JSON
+```
+
+仓库中的 `PYTHON知识点与练习网站` 文件还提供了 Python 知识点和练习入口。
+
 ## 📁 目录结构
 
 ```

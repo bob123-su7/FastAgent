@@ -9,19 +9,22 @@
 from .agent import Agent
 from .memory import InMemoryMemory, Memory
 from .skill import Skill, SkillRegistry
+from .tracer import AgentTracer, TraceSpan
 from .types import Message, Role, ToolCall, ToolResult
 
 __version__ = "0.1.0"
 
 __all__ = [
     "Agent",
-    "Memory",
+    "AgentTracer",
     "InMemoryMemory",
-    "Skill",
-    "SkillRegistry",
+    "Memory",
     "Message",
     "Role",
+    "Skill",
+    "SkillRegistry",
     "ToolCall",
     "ToolResult",
+    "TraceSpan",
     "__version__",
 ]
