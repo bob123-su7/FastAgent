@@ -157,3 +157,105 @@ FastAgent/
 ---
 
 **FastAgent —— 助力每一个梦想，一起把 AI Agent 学明白、用起来。**
+
+```
+## 🚀 快速开始
+
+### 1. 克隆项目
+
+```bash
+git clone https://github.com/limouren2000/FastAgent.git
+cd FastAgent
+```
+
+### 2. 安装依赖
+
+建议使用 Python 虚拟环境：
+
+```
+python3 -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 3. 运行第一个 FastAgent 示例
+
+```
+python3 examples/hello_fastagent.py
+```
+
+预期输出：
+
+```
+Hello, FastAgent! Welcome to FastAgent.
+```
+
+### 4. 尝试 Calculator Agent
+
+运行一个更完整的 Agent 示例：
+
+```
+python3 examples/calculator_agent.py
+```
+
+通过这个示例可以进一步了解 Agent 的基本调用流程。
+
+### 5. 运行测试
+
+在修改代码或提交 Pull Request 前，可以运行：
+
+```
+python3 -m pytest
+```
+
+确保已有功能能够正常工作。
+
+### 6. 尝试执行追踪
+
+FastAgent 提供了轻量级的 AgentTracer，可以查看 Agent 执行过程中的步骤和耗时：
+
+```
+python -X utf8 examples/tracer_demo.py
+```
+
+建议第一次接触项目时按照：
+
+```
+Hello FastAgent → Calculator Agent → AgentTracer
+```
+
+的顺序运行示例，再继续阅读项目中的其他技术文档。
+
+```
+注意 Markdown 里有嵌套代码块，你在实际编辑时正常写即可。
+
+这个改动的好处是：**不是瞎加文字，而是在整理现有 README 的新手使用流程。**
+
+---
+
+## 4. 看看你改了什么
+
+改完保存：
+
+```bash
+git status
+```
+
+然后：
+
+```
+git diff README.md
+```
+
+你应该能看到类似：
+
+```
++ ### 1. 克隆项目
++
++ git clone ...
++
++ ### 2. 安装依赖
+...
+```
+
+确认没有误删内容。
