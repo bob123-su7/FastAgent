@@ -13,7 +13,7 @@
 提交前，请在仓库根目录运行测试：
 
 ```bash
-python3 -m unittest discover -s tests -v
+python3 -m pytest
 ```
 
 ## 提交规范
