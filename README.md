@@ -12,6 +12,7 @@ FastAgent 是一个**面向实践**的 AI Agent 学习项目，欢迎通过示�
 - **跨工具工作流规范**：一套通用的 10 步闭环工作流程 Skill，兼容 WorkBuddy / Claude Code / Codex / Cursor。
 - **社区共建**：欢迎通过 Issue 和 Pull Request 一起完善这个学习项目。
 
+### 安装依赖
 
 ```bash
 pip install -r requirements.txt
@@ -77,7 +78,7 @@ print(tracer.to_json())  # 导出 JSON
 
 ## 📁 目录结构
 
-```
+```text
 FastAgent/
 ├── fastagent/                         # Agent、Memory、Skill 与内置工具等核心代码
 │   └── tools/                         # Calculator、Clock、文件读写等内置 Skill
