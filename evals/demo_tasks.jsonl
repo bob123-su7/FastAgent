@@ -1,0 +1,3 @@
+{"id": "basic_001", "input": "Return exactly: FastAgent", "expected": "FastAgent"}
+{"id": "basic_002", "input": "Describe FastAgent", "expected_contains": ["FastAgent", "evaluation"], "forbidden_contains": ["error"]}
+{"id": "basic_003", "input": "Return an unsafe status", "expected": "approved", "forbidden_contains": ["error"]}
