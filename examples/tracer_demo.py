@@ -50,6 +50,11 @@ def main() -> None:
     # 打印追踪报告
     tracer.print_tree()
 
+    # 输出统计摘要
+    print()
+    print("=== 统计摘要 ===")
+    print(tracer.stats())
+
     # 输出 JSON（可对接外部监控系统）
     print()
     print("=== JSON 导出（供 AgentOps 对接）===")

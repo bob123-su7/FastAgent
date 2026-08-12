@@ -82,6 +82,23 @@ class TraceSpan:
         for i, child in enumerate(self.children):
             child._render_tree(lines, prefix + branch, i == len(self.children) - 1)
 
+    def _collect_stats(self, stats: Dict[str, Any]) -> None:
+        """递归收集自身及所有子节点的统计数据。"""
+        if self.parent is not None:  # 跳过根节点
+            dur = round(self.duration_ms, 2)
+            stats["total_spans"] += 1
+            stats["total_duration_ms"] += dur
+            if dur < stats["min_duration_ms"]:
+                stats["min_duration_ms"] = dur
+                stats["min_duration_span"] = {"name": self.name, "duration_ms": dur}
+            if dur > stats["max_duration_ms"]:
+                stats["max_duration_ms"] = dur
+                stats["max_duration_span"] = {"name": self.name, "duration_ms": dur}
+            if self.depth > stats["max_depth"]:
+                stats["max_depth"] = self.depth
+        for child in self.children:
+            child._collect_stats(stats)
+
     def to_dict(self) -> Dict[str, Any]:
         """将追踪树导出为字典，便于 JSON 序列化。"""
         return {
@@ -180,3 +197,42 @@ class AgentTracer:
     def to_json(self, indent: int = 2) -> str:
         """将追踪树导出为 JSON 字符串。"""
         return json.dumps(self.to_dict(), indent=indent, ensure_ascii=False)
+
+    def stats(self) -> Dict[str, Any]:
+        """返回追踪执行的统计摘要。
+
+        返回字典包含:
+            - total_spans: 步骤总数（不含根节点）
+            - total_duration_ms: 所有步骤总耗时（ms）
+            - avg_duration_ms: 平均耗时（ms）
+            - min_duration_ms / max_duration_ms: 最快 / 最慢步骤耗时
+            - min_duration_span / max_duration_span: 最快 / 最慢步骤的名称与耗时
+            - max_depth: 最大嵌套深度
+        """
+        stats: Dict[str, Any] = {
+            "total_spans": 0,
+            "total_duration_ms": 0.0,
+            "min_duration_ms": float("inf"),
+            "max_duration_ms": -1.0,
+            "min_duration_span": None,
+            "max_duration_span": None,
+            "max_depth": 0,
+        }
+        self._root._collect_stats(stats)
+        if stats["total_spans"] > 0:
+            stats["avg_duration_ms"] = round(
+                stats["total_duration_ms"] / stats["total_spans"], 2
+            )
+        else:
+            stats["avg_duration_ms"] = 0.0
+        stats["total_duration_ms"] = round(stats["total_duration_ms"], 2)
+        stats["min_duration_ms"] = (
+            round(stats["min_duration_ms"], 2)
+            if stats["min_duration_span"] is not None
+            else 0.0
+        )
+        if stats["max_duration_span"] is None:
+            stats["max_duration_ms"] = 0.0
+        else:
+            stats["max_duration_ms"] = round(stats["max_duration_ms"], 2)
+        return stats
