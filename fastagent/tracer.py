@@ -186,8 +186,11 @@ class AgentTracer:
         header += _color(f"(总耗时 {root_dur:.0f}ms)", "dim")
         header += "\n" + "─" * 50
         print(header)
+        lines: List[str] = []
         for i, child in enumerate(self._root.children):
-            child._render_tree([], "", i == len(self._root.children) - 1)
+            child._render_tree(lines, "", i == len(self._root.children) - 1)
+        if lines:
+            print("\n".join(lines))
         print("─" * 50)
 
     def to_dict(self) -> Dict[str, Any]:
