@@ -6,6 +6,8 @@
 
 from __future__ import annotations
 
+import functools
+import inspect
 import json
 import time
 from contextlib import contextmanager
@@ -171,6 +173,16 @@ class AgentTracer:
         def decorator(func: Callable) -> Callable:
             span_name = name or func.__name__
 
+            if inspect.iscoroutinefunction(func):
+
+                @functools.wraps(func)
+                async def async_wrapper(*args: Any, **kwargs: Any) -> Any:
+                    with self.span(span_name, metadata=metadata):
+                        return await func(*args, **kwargs)
+
+                return async_wrapper
+
+            @functools.wraps(func)
             def wrapper(*args: Any, **kwargs: Any) -> Any:
                 with self.span(span_name, metadata=metadata):
                     return func(*args, **kwargs)
