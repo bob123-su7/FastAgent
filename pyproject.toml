@@ -23,4 +23,4 @@ dev = [
 asyncio_mode = "auto"
 
 [tool.hatch.build.targets.wheel]
-packages = ["fastagent"]
+packages = ["fastagent", "fastagent_eval", "fastagent_trace"]
