@@ -1,4 +1,4 @@
-"""Tests for the local trace recorder MVP."""
+"""Tests for the local trace recorder MVP and AgentTracer."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import tempfile
 import unittest
 from pathlib import Path
 
+from fastagent import AgentTracer
 from fastagent_trace import TraceEvent, TraceRecorder, TraceValidationError
 
 
@@ -76,3 +77,59 @@ class TraceRecorderTests(unittest.TestCase):
 
         self.assertEqual(len(lines), 2)
         self.assertEqual([json.loads(line)["step_id"] for line in lines], ["first", "second"])
+
+
+class AgentTracerStatsTests(unittest.TestCase):
+    """Tests for AgentTracer.stats() summary method."""
+
+    def test_stats_empty_tracer(self) -> None:
+        tracer = AgentTracer(name="empty")
+        result = tracer.stats()
+        self.assertEqual(result["total_spans"], 0)
+        self.assertEqual(result["total_duration_ms"], 0.0)
+        self.assertEqual(result["avg_duration_ms"], 0.0)
+        self.assertEqual(result["max_depth"], 0)
+
+    def test_stats_single_span(self) -> None:
+        import time
+
+        tracer = AgentTracer(name="single")
+        with tracer.span("step1"):
+            time.sleep(0.01)
+        result = tracer.stats()
+        self.assertEqual(result["total_spans"], 1)
+        self.assertGreater(result["total_duration_ms"], 0)
+        self.assertEqual(result["avg_duration_ms"], result["total_duration_ms"])
+        self.assertEqual(result["min_duration_span"]["name"], "step1")
+        self.assertEqual(result["max_duration_span"]["name"], "step1")
+        self.assertEqual(result["max_depth"], 1)
+
+    def test_stats_multiple_nested_spans(self) -> None:
+        import time
+
+        tracer = AgentTracer(name="nested")
+        with tracer.span("outer"):
+            time.sleep(0.01)
+            with tracer.span("inner"):
+                time.sleep(0.01)
+        result = tracer.stats()
+        self.assertEqual(result["total_spans"], 2)
+        self.assertEqual(result["max_depth"], 2)
+        self.assertIsNotNone(result["max_duration_span"])
+        self.assertIsNotNone(result["min_duration_span"])
+        self.assertGreaterEqual(
+            result["max_duration_span"]["duration_ms"],
+            result["min_duration_span"]["duration_ms"],
+        )
+
+    def test_stats_identifies_slowest_span(self) -> None:
+        tracer = AgentTracer(name="timing")
+        with tracer.span("fast"):
+            pass
+        with tracer.span("slow"):
+            # 用一个极短的 sleep 拉开差距
+            import time
+            time.sleep(0.05)
+        result = tracer.stats()
+        self.assertEqual(result["max_duration_span"]["name"], "slow")
+        self.assertEqual(result["min_duration_span"]["name"], "fast")
