@@ -78,7 +78,7 @@ print(tracer.to_json())  # 导出 JSON
 
 ## 📁 目录结构
 
-```
+```text
 FastAgent/
 ├── fastagent/                         # Agent、Memory、Skill 与内置工具等核心代码
 │   └── tools/                         # Calculator、Clock、文件读写等内置 Skill
