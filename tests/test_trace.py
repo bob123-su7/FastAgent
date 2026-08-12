@@ -2,8 +2,10 @@
 
 from __future__ import annotations
 
+import asyncio
 import json
 import tempfile
+import time
 import unittest
 from pathlib import Path
 
@@ -133,3 +135,89 @@ class AgentTracerStatsTests(unittest.TestCase):
         result = tracer.stats()
         self.assertEqual(result["max_duration_span"]["name"], "slow")
         self.assertEqual(result["min_duration_span"]["name"], "fast")
+
+
+class AgentTracerTraceDecoratorTests(unittest.TestCase):
+    """Tests for the AgentTracer.trace() decorator on sync functions."""
+
+    def test_trace_sync_function_records_duration_and_result(self) -> None:
+        tracer = AgentTracer(name="sync")
+
+        @tracer.trace()
+        def step() -> str:
+            time.sleep(0.01)
+            return "ok"
+
+        result = step()
+
+        self.assertEqual(result, "ok")
+        span = tracer.to_dict()["children"][0]
+        self.assertEqual(span["name"], "step")
+        self.assertGreater(span["duration_ms"], 0)
+
+    def test_trace_custom_name_and_metadata(self) -> None:
+        tracer = AgentTracer(name="custom")
+
+        @tracer.trace(name="llm-call", metadata={"model": "gpt-4o"})
+        def step() -> None:
+            return None
+
+        step()
+
+        span = tracer.to_dict()["children"][0]
+        self.assertEqual(span["name"], "llm-call")
+        self.assertEqual(span["metadata"], {"model": "gpt-4o"})
+
+    def test_trace_preserves_function_metadata(self) -> None:
+        tracer = AgentTracer(name="wraps")
+
+        @tracer.trace()
+        def step() -> int:
+            """Docstring of step."""
+            return 1
+
+        self.assertEqual(step.__name__, "step")
+        self.assertEqual(step.__doc__, "Docstring of step.")
+
+    def test_trace_propagates_sync_exceptions(self) -> None:
+        tracer = AgentTracer(name="errors")
+
+        @tracer.trace()
+        def step() -> None:
+            raise RuntimeError("boom")
+
+        with self.assertRaisesRegex(RuntimeError, "boom"):
+            step()
+        # The span is still closed when the exception escapes.
+        self.assertEqual(len(tracer.to_dict()["children"]), 1)
+
+
+class AgentTracerAsyncTraceDecoratorTests(unittest.IsolatedAsyncioTestCase):
+    """Tests for the AgentTracer.trace() decorator on async functions."""
+
+    async def test_trace_async_function_records_duration_and_result(self) -> None:
+        tracer = AgentTracer(name="async")
+
+        @tracer.trace()
+        async def step() -> str:
+            await asyncio.sleep(0.01)
+            return "done"
+
+        result = await step()
+
+        self.assertEqual(result, "done")
+        span = tracer.to_dict()["children"][0]
+        self.assertEqual(span["name"], "step")
+        self.assertGreater(span["duration_ms"], 0)
+
+    async def test_trace_async_function_propagates_exceptions(self) -> None:
+        tracer = AgentTracer(name="async-errors")
+
+        @tracer.trace()
+        async def step() -> None:
+            await asyncio.sleep(0.001)
+            raise RuntimeError("boom")
+
+        with self.assertRaisesRegex(RuntimeError, "boom"):
+            await step()
+        self.assertEqual(len(tracer.to_dict()["children"]), 1)
