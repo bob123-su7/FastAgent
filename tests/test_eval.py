@@ -2,9 +2,12 @@
 
 from __future__ import annotations
 
+import os
+import sys
 import tempfile
 import unittest
 from pathlib import Path
+from subprocess import run
 
 from fastagent_eval.graders import contains_all, contains_none, exact_match
 from fastagent_eval.runner import load_tasks, run_evaluation
@@ -63,6 +66,23 @@ class RunnerTests(unittest.TestCase):
         task = EvaluationTask(id="type", input="prompt")
         with self.assertRaisesRegex(TypeError, "must be a string"):
             run_evaluation(lambda prompt: 1, [task])  # type: ignore[return-value]
+
+
+class EvaluationDemoTests(unittest.TestCase):
+    def test_demo_runs_with_gbk_console_encoding(self) -> None:
+        project_root = Path(__file__).resolve().parents[1]
+
+        completed = run(
+            [sys.executable, "examples/eval_demo.py"],
+            cwd=project_root,
+            capture_output=True,
+            encoding="gbk",
+            env={**os.environ, "PYTHONIOENCODING": "gbk"},
+            check=False,
+        )
+
+        self.assertEqual(completed.returncode, 0, completed.stderr)
+        self.assertIn("[PASS] basic_001", completed.stdout)
 
 
 class TaskLoadingTests(unittest.TestCase):

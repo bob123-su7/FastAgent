@@ -29,7 +29,7 @@ def main() -> None:
     print("====================")
     print()
     for result in run.task_results:
-        marker = "✓" if result.passed else "✗"
+        marker = "[PASS]" if result.passed else "[FAIL]"
         print(f"{marker} {result.task_id}")
     print()
     print(f"Passed: {run.summary.passed} / {run.summary.total}")
