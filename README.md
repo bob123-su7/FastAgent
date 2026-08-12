@@ -12,7 +12,24 @@ FastAgent 是一个**面向实践**的 AI Agent 学习项目，欢迎通过示�
 - **跨工具工作流规范**：一套通用的 10 步闭环工作流程 Skill，兼容 WorkBuddy / Claude Code / Codex / Cursor。
 - **社区共建**：欢迎通过 Issue 和 Pull Request 一起完善这个学习项目。
 
-## 🚀 快速开始
+
+```bash
+pip install -r requirements.txt
+```
+
+### 运行测试
+
+```bash
+pytest
+```
+
+### 运行 Agent 示例
+
+```bash
+python examples/calculator_agent.py
+```
+
+## 快速开始
 
 运行欢迎示例：
 
@@ -26,7 +43,7 @@ python3 examples/hello_fastagent.py
 Hello, FastAgent! Welcome to FastAgent.
 ```
 
-> 💡 仓库中的 `PYTHON知识点与练习网站` 文件还提供了 Python 知识点和练习入口，点击链接即可直接进入练习。
+
 
 ## 📁 目录结构
 
