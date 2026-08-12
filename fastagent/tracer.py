@@ -50,8 +50,9 @@ class TraceSpan:
     @property
     def duration_ms(self) -> float:
         """步骤耗时（毫秒）。"""
-        if self._start and self._end:
-            return (self._end - self._start) * 1000
+        if self._start:
+            end = self._end or time.perf_counter()
+            return (end - self._start) * 1000
         return 0.0
 
     @property
@@ -131,6 +132,7 @@ class AgentTracer:
 
     def __init__(self, name: str = "AgentRun") -> None:
         self._root = TraceSpan(name=name)
+        self._root._start = time.perf_counter()
         self._current = self._root
 
     # ── 上下文管理器 ──────────────────────────────────────────────────────
@@ -187,7 +189,9 @@ class AgentTracer:
         header += "\n" + "─" * 50
         print(header)
         for i, child in enumerate(self._root.children):
-            child._render_tree([], "", i == len(self._root.children) - 1)
+            lines: List[str] = []
+            child._render_tree(lines, "", i == len(self._root.children) - 1)
+            print("\n".join(lines))
         print("─" * 50)
 
     def to_dict(self) -> Dict[str, Any]:
