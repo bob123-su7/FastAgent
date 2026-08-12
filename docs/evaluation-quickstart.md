@@ -24,8 +24,9 @@ def agent_fn(prompt: str) -> str:
 
 ## Write tasks in JSONL
 
-Use one JSON object per line. `id` and `input` are required; all expectation
-fields are optional.
+Use one JSON object per line. `id` and `input` are required. Each task must
+also configure at least one grader: `expected`, a non-empty
+`expected_contains`, or a non-empty `forbidden_contains`.
 
 ```json
 {"id": "basic_001", "input": "Return exactly: FastAgent", "expected": "FastAgent"}

@@ -6,13 +6,22 @@ from dataclasses import dataclass
 from typing import Any, Mapping
 
 
+_ALLOWED_TASK_FIELDS = {
+    "id",
+    "input",
+    "expected",
+    "expected_contains",
+    "forbidden_contains",
+}
+
+
 class TaskValidationError(ValueError):
     """Raised when an evaluation task does not match the supported schema."""
 
 
 @dataclass(frozen=True)
 class EvaluationTask:
-    """One prompt and its optional deterministic expectations."""
+    """One prompt and its deterministic expectations."""
 
     id: str
     input: str
@@ -25,12 +34,21 @@ class EvaluationTask:
         """Validate a JSON-compatible mapping and create an evaluation task."""
         if not isinstance(data, Mapping):
             raise TaskValidationError("Task must be a JSON object.")
+        unknown_fields = set(data) - _ALLOWED_TASK_FIELDS
+        if unknown_fields:
+            fields = ", ".join(sorted(unknown_fields))
+            raise TaskValidationError(f"Task has unsupported field(s): {fields}.")
 
         task_id = _required_string(data, "id")
         prompt = _required_string(data, "input")
         expected = _optional_string(data, "expected")
         expected_contains = _string_list(data, "expected_contains")
         forbidden_contains = _string_list(data, "forbidden_contains")
+        if expected is None and not expected_contains and not forbidden_contains:
+            raise TaskValidationError(
+                "Task must configure at least one grader: 'expected', "
+                "non-empty 'expected_contains', or non-empty 'forbidden_contains'."
+            )
 
         return cls(
             id=task_id,

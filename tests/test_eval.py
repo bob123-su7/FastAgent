@@ -70,6 +70,27 @@ class TaskLoadingTests(unittest.TestCase):
         with self.assertRaisesRegex(TaskValidationError, "missing required field 'input'"):
             EvaluationTask.from_dict({"id": "missing-input"})
 
+    def test_task_without_a_grader_is_rejected(self) -> None:
+        with self.assertRaisesRegex(TaskValidationError, "at least one grader"):
+            EvaluationTask.from_dict({"id": "no-grader", "input": "prompt"})
+
+    def test_empty_grader_lists_do_not_count_as_a_grader(self) -> None:
+        with self.assertRaisesRegex(TaskValidationError, "at least one grader"):
+            EvaluationTask.from_dict(
+                {
+                    "id": "empty-graders",
+                    "input": "prompt",
+                    "expected_contains": [],
+                    "forbidden_contains": [],
+                }
+            )
+
+    def test_unknown_task_field_is_rejected(self) -> None:
+        with self.assertRaisesRegex(TaskValidationError, "unsupported field.*expectd"):
+            EvaluationTask.from_dict(
+                {"id": "misspelled", "input": "prompt", "expectd": "result"}
+            )
+
     def test_jsonl_task_loading(self) -> None:
         project_root = Path(__file__).resolve().parents[1]
         tasks = load_tasks(project_root / "evals" / "demo_tasks.jsonl")
@@ -81,7 +102,10 @@ class TaskLoadingTests(unittest.TestCase):
     def test_invalid_jsonl_includes_line_number(self) -> None:
         with tempfile.TemporaryDirectory() as temp_dir:
             task_file = Path(temp_dir) / "invalid.jsonl"
-            task_file.write_text('{"id": "ok", "input": "prompt"}\nnot-json\n', encoding="utf-8")
+            task_file.write_text(
+                '{"id": "ok", "input": "prompt", "expected": "prompt"}\nnot-json\n',
+                encoding="utf-8",
+            )
 
             with self.assertRaisesRegex(TaskValidationError, r"line 2"):
                 load_tasks(task_file)
