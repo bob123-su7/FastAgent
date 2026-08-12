@@ -49,6 +49,18 @@ python3 examples/hello_fastagent.py
 Hello, FastAgent! Welcome to FastAgent.
 ```
 
+也可以传入一个名称，生成自定义问候：
+
+```bash
+python3 examples/hello_fastagent.py Ada
+```
+
+预期输出：
+
+```text
+Hello, Ada! Welcome to FastAgent.
+```
+
 仓库中的 `PYTHON知识点与练习网站` 文件还提供了 Python 知识点和练习入口。
 
 ## 文档导览
