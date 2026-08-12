@@ -117,7 +117,7 @@ FastAgent/
 
 欢迎提交 Issue 或 Pull Request！提交前请先阅读[贡献指南](CONTRIBUTING.md)。
 
-- 🐛 发现 Bug？提交 Issue 告诉我们。
+- 🐛 发现 Bug？提交 Issue 告诉我们吧。
 - 💡 有改进想法？欢迎提交 PR。
 - 📖 想补充文档或示例？同样欢迎。
 
